@@ -148,6 +148,7 @@ func (h *shadowHandler) Handle(conn net.Conn) {
 	defer cc.Close()
 
 	log.Logf("[ss] %s <-> %s", conn.RemoteAddr(), addr)
+	willVisitHost(addr)
 	transport(conn, cc)
 	log.Logf("[ss] %s >-< %s", conn.RemoteAddr(), addr)
 }

@@ -336,6 +336,7 @@ func (h *http2Handler) roundTrip(w http.ResponseWriter, r *http.Request) {
 			defer conn.Close()
 
 			log.Logf("[http2] %s <-> %s : downgrade to HTTP/1.1", r.RemoteAddr, target)
+			willVisitHost(target)
 			transport(conn, cc)
 			log.Logf("[http2] %s >-< %s", r.RemoteAddr, target)
 			return
@@ -510,7 +511,7 @@ func H2CListener(addr string) (Listener, error) {
 	l := &h2Listener{
 		Listener: tcpKeepAliveListener{ln.(*net.TCPListener)},
 		server:   &http2.Server{
-		// MaxConcurrentStreams:         1000,
+			// MaxConcurrentStreams:         1000,
 		},
 		connChan: make(chan net.Conn, 1024),
 		errChan:  make(chan error, 1),

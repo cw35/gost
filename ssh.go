@@ -514,6 +514,7 @@ func (h *sshForwardHandler) directPortForwardChannel(channel ssh.Channel, raddr 
 	defer conn.Close()
 
 	log.Logf("[ssh-tcp] %s <-> %s", h.options.Addr, raddr)
+	willVisitHost(raddr)
 	transport(conn, channel)
 	log.Logf("[ssh-tcp] %s >-< %s", h.options.Addr, raddr)
 }
@@ -594,6 +595,7 @@ func (h *sshForwardHandler) tcpipForwardRequest(sshConn ssh.Conn, req *ssh.Reque
 				go ssh.DiscardRequests(reqs)
 
 				log.Logf("[ssh-rtcp] %s <-> %s", conn.RemoteAddr(), conn.LocalAddr())
+				willVisitHost(conn.LocalAddr().String())
 				transport(ch, conn)
 				log.Logf("[ssh-rtcp] %s >-< %s", conn.RemoteAddr(), conn.LocalAddr())
 			}(conn)

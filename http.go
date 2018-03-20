@@ -193,6 +193,7 @@ func (h *httpHandler) handleRequest(conn net.Conn, req *http.Request) {
 	}
 
 	log.Logf("[http] %s <-> %s", cc.LocalAddr(), host)
+	willVisitHost(host)
 	transport(conn, cc)
 	log.Logf("[http] %s >-< %s", cc.LocalAddr(), host)
 }
@@ -237,6 +238,7 @@ func (h *httpHandler) forwardRequest(conn net.Conn, req *http.Request) {
 	cc.SetWriteDeadline(time.Time{})
 
 	log.Logf("[http] %s <-> %s", conn.RemoteAddr(), req.Host)
+	willVisitHost(req.Host)
 	transport(conn, cc)
 	log.Logf("[http] %s >-< %s", conn.RemoteAddr(), req.Host)
 	return
